@@ -117,9 +117,9 @@
   ];
   const norm = value => String(value || "").toLocaleLowerCase("ru").replace(/ё/g,"е").replace(/[«»„“”"'.,!?():;]/g," ").replace(/[^\p{L}\p{N}\s-]/gu," ").replace(/\s+/g," ").trim();
   const roleHints = {
-    parent:["родител","мам","пап","законный представитель"],
-    student:["учен","школьник","учащ"],
-    teacher:["учител","педагог","классный руководитель"]
+    parent:{hints:["родител","мам","пап","законный представитель"],label:"родител"},
+    student:{hints:["учен","школьник","учащ"],label:"учен"},
+    teacher:{hints:["учител","педагог","классный руководитель"],label:"учител"}
   };
   function tokens(value){ return norm(value).split(/\s+/).filter(x=>x.length>1); }
   function score(query, route) {
