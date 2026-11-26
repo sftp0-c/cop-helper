@@ -136,9 +136,9 @@
     }
     const matched=words.filter(w=>title.includes(w)||route.keywords.some(k=>norm(k).includes(w))).length;
     points+=matched*1.5;
-    const role=Object.keys(roleHints).find(r=>roleHints[r].some(h=>q.includes(h)));
-    if(role && route.role.toLowerCase().includes(role)) points+=7;
-    else if(role && route.role.toLowerCase()!=="любая" && !route.role.toLowerCase().includes(role)) points-=4;
+    const role=Object.keys(roleHints).find(r=>roleHints[r].hints.some(h=>q.includes(h)));
+    if(role && route.role.toLowerCase().includes(roleHints[role].label)) points+=7;
+    else if(role && route.role.toLowerCase()!=="любая" && !route.role.toLowerCase().includes(roleHints[role].label)) points-=4;
     return points;
   }
   function find(query) {
