@@ -115,13 +115,13 @@
       ]
     }
   ];
-  const norm = value => String(value || "").toLocaleLowerCase("ru").replace(/ё/g,"е").replace(/[«»„“”"'.,!?():;]/g," ").replace(/[^\\p{L}\\p{N}\\s-]/gu," ").replace(/\\s+/g," ").trim();
+  const norm = value => String(value || "").toLocaleLowerCase("ru").replace(/ё/g,"е").replace(/[«»„“”"'.,!?():;]/g," ").replace(/[^\p{L}\p{N}\s-]/gu," ").replace(/\s+/g," ").trim();
   const roleHints = {
     parent:["родител","мам","пап","законный представитель"],
     student:["учен","школьник","учащ"],
     teacher:["учител","педагог","классный руководитель"]
   };
-  function tokens(value){ return norm(value).split(/\\s+/).filter(x=>x.length>1); }
+  function tokens(value){ return norm(value).split(/\s+/).filter(x=>x.length>1); }
   function score(query, route) {
     const q=norm(query); if(!q) return 0;
     const words=tokens(q); let points=0;
