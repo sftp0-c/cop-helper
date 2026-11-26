@@ -1,23 +1,14 @@
 {
   "manifest_version": 3,
   "name": "ЦОП Помощник",
-  "version": "2.0.0",
-  "description": "Навигатор по ЦОП: поиск маршрутов, пошаговые подсказки и безопасная подсветка элементов.",
+  "version": "3.0.0",
+  "description": "Встроенный помощник ЦОП: контекстные подсказки, пошаговые инструкции и поиск по платформе.",
   "browser_specific_settings": { "gecko": { "id": "cop-helper@admhmao.ru", "strict_min_version": "109.0" } },
   "icons": { "96": "icon.svg" },
   "action": { "default_popup": "popup.html", "default_title": "ЦОП Помощник", "default_icon": "icon.svg" },
   "permissions": ["storage"],
-  "host_permissions": [
-    "https://cop.admhmao.ru/*",
-    "https://hmao.pfdo.ru/*",
-    "https://cop-pitanie.admhmao.ru/*"
-  ],
   "content_scripts": [{
-    "matches": [
-      "https://cop.admhmao.ru/*",
-      "https://hmao.pfdo.ru/*",
-      "https://cop-pitanie.admhmao.ru/*"
-    ],
+    "matches": ["https://cop.admhmao.ru/*"],
     "js": ["data.js", "content.js"],
     "run_at": "document_idle"
   }]
