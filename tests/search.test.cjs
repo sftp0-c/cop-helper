@@ -21,4 +21,7 @@ for(const [query,id] of cases){
  assert.equal(result.scenario.id,id,query+" should resolve to "+id);
 }
 assert.equal(find("абракадабра неизвестный запрос").type,"none");
-console.log("Cop Helper v2 search smoke tests passed: "+cases.length+" routes + unknown query.");
+const manifest=JSON.parse(fs.readFileSync("manifest.json","utf8"));
+assert.deepEqual(manifest.content_scripts[0].matches,["https://cop.admhmao.ru/*"]);
+assert.equal(manifest.version,"3.0.0");
+console.log("Cop Helper 3.0 smoke tests passed: "+cases.length+" routes, unknown query and strict COP-only injection.");
