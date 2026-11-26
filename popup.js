@@ -1,186 +1,30 @@
-const LOG_KEY = "cop_response_log";
-const STEP_KEY = "cop_current_step";
-
-function el(tag, text, cls) {
-  const node = document.createElement(tag);
-  if (text !== null && text !== undefined) node.textContent = String(text);
-  if (cls) node.className = cls;
-  return node;
+"use strict";
+const LOG_KEY="cop_response_log", STEP_KEY="cop_current_step";
+const $=id=>document.getElementById(id);
+function node(tag,text,cls){const n=document.createElement(tag);if(text!==undefined&&text!==null)n.textContent=String(text);if(cls)n.className=cls;return n;}
+function storage(){try{return typeof browser!=="undefined"&&browser.storage?browser.storage.local:null;}catch(e){return null;}}
+function openLink(href){const url=window.COP_absUrl(href);if(!url)return;try{browser.tabs.create({url});}catch(e){window.open(url,"_blank","noopener");}}
+async function logQuery(query,result){const s=storage();if(!s)return;try{const d=await s.get(LOG_KEY);const items=Array.isArray(d[LOG_KEY])?d[LOG_KEY]:[];items.unshift({time:new Date().toLocaleString("ru-RU"),query,result});await s.set({[LOG_KEY]:items.slice(0,30)});renderLog();}catch(e){}}
+async function renderLog(){const root=$("log");root.replaceChildren();const s=storage();if(!s){root.append(node("div","Хранилище недоступно.","empty"));return;}try{const d=await s.get(LOG_KEY),items=Array.isArray(d[LOG_KEY])?d[LOG_KEY]:[];if(!items.length){root.append(node("div","Запросов пока нет.","empty"));return;}items.forEach(x=>{const row=node("div",x.time+" · "+x.query+" → "+x.result,"log-entry");root.append(row);});}catch(e){root.append(node("div","Не удалось загрузить журнал.","empty"));}}
+function activateStep(step){const s=storage();if(!s){$("status").textContent="Хранилище недоступно.";return;}s.set({[STEP_KEY]:step}).then(()=>{$("status").textContent="Подсказка отправлена на открытую страницу ЦОП.";}).catch(()=>{$("status").textContent="Откройте страницу ЦОП и попробуйте ещё раз.";});}
+function renderScenario(root,s){
+ const head=node("div",null,"result-head");head.append(node("div",s.title,"route-title"));head.append(node("span",s.category,"pill"));root.append(head);
+ root.append(node("div","Роль: "+s.role+" · Старт: "+s.startScreen,"meta"));
+ root.append(node("p","Результат: "+s.expectedResult,"meta"));
+ const note=node("div",s.confidence,"note");root.append(note);
+ const actions=node("div",null,"actions");(s.links||[]).forEach(l=>{const b=node("button","Открыть: "+l.title);b.addEventListener("click",()=>openLink(l.href));actions.append(b);});root.append(actions);
+ const list=node("ol",null,"steps");(s.steps||[]).forEach((step,i)=>{const li=node("li");li.append(node("b",step.title));li.append(node("p",step.instruction));if(step.selectorText){const b=node("button","Подсветить «"+step.selectorText+"»");b.style.marginTop="7px";b.addEventListener("click",()=>activateStep({...step,id:s.id+"-"+i}));li.append(b);}list.append(li);});root.append(list);
 }
-
-function safeStorage() {
-  try {
-    if (typeof browser !== "undefined" && browser.storage && browser.storage.local) {
-      return browser.storage.local;
-    }
-  } catch (e) {}
-  return null;
+function search(query){const q=String(query||"").trim();const root=$("result");root.replaceChildren();if(!q)return;const state=window.COP_find(q);
+ if(state.type==="clarify"){root.append(node("p","Уточните, какой сценарий вам нужен:","meta"));state.variants.forEach(s=>{const b=node("button",s.title,"route");b.addEventListener("click",()=>{$("query").value=s.sample;search(s.sample);});root.append(b);});logQuery(q,"уточнение");return;}
+ if(state.type==="none"){root.append(node("p","Не удалось надёжно определить маршрут. Попробуйте указать роль и действие: например, «учителю назначить онлайн-урок».","meta"));const b=node("button","Открыть службу поддержки","route");b.addEventListener("click",()=>openLink("/journal-help-action"));root.append(b);logQuery(q,"не распознано");return;}
+ renderScenario(root,state.scenario);logQuery(q,state.scenario.title);
 }
-
-function activateStep(step) {
-  const storage = safeStorage();
-  if (storage) {
-    try {
-      const saved = storage.set({ [STEP_KEY]: step });
-      if (saved && typeof saved.catch === "function") saved.catch(() => {});
-    } catch (e) {}
-  }
-  try {
-    if (typeof browser !== "undefined" && browser.runtime && browser.runtime.sendMessage) {
-      const sent = browser.runtime.sendMessage({ type: "COP_STEP", step: step });
-      if (sent && typeof sent.catch === "function") sent.catch(() => {});
-    }
-  } catch (e) {}
-}
-
-function openLink(href) {
-  try {
-    if (typeof browser !== "undefined" && browser.tabs && browser.tabs.create) {
-      browser.tabs.create({ url: window.COP_absUrl(href) });
-    }
-  } catch (e) {}
-}
-
-function addLog(query, result) {
-  const storage = safeStorage();
-  if (!storage) return;
-  try {
-    storage.get(LOG_KEY).then((data) => {
-      const log = data && Array.isArray(data[LOG_KEY]) ? data[LOG_KEY] : [];
-      log.unshift({ time: new Date().toLocaleString("ru-RU"), query: query, result: result });
-      storage.set({ [LOG_KEY]: log.slice(0, 20) });
-      renderLog();
-    }).catch(() => {});
-  } catch (e) {}
-}
-
-function renderLog() {
-  const root = document.getElementById("log");
-  if (!root) return;
-  root.innerHTML = "";
-  const storage = safeStorage();
-  if (!storage) return;
-  try {
-    storage.get(LOG_KEY).then((data) => {
-      const log = data && Array.isArray(data[LOG_KEY]) ? data[LOG_KEY] : [];
-      if (!log.length) { root.appendChild(el("div", "Запросов пока нет", "meta")); return; }
-      log.forEach((item) => {
-        root.appendChild(el("div", item.time + " — " + item.query + " → " + item.result, "log-entry"));
-      });
-    }).catch(() => {});
-  } catch (e) {}
-}
-
-function renderScenario(root, s) {
-  root.appendChild(el("h3", s.title));
-  root.appendChild(el("div", "Роль: " + s.role + " | Старт: " + s.startScreen, "meta"));
-  root.appendChild(el("div", "Ожидаемый результат: " + s.expectedResult, "meta"));
-
-  const links = el("div", "", "row");
-  (s.links || []).forEach((link) => {
-    const btn = el("button", "Открыть: " + link.title);
-    btn.addEventListener("click", () => openLink(link.href));
-    links.appendChild(btn);
-  });
-  root.appendChild(links);
-
-  s.steps.forEach((step, i) => {
-    const box = el("div", "", "step");
-    box.appendChild(el("div", (i + 1) + ". " + step.title, "step-title"));
-    box.appendChild(el("div", step.instruction, "step-instr"));
-    const row = el("div", "", "row");
-    const show = el("button", step.selectorText ? "Подсветить «" + step.selectorText + "»" : "Подсветить", "danger");
-    show.addEventListener("click", () => activateStep({ ...step, id: s.id + "-" + i }));
-    row.appendChild(show);
-    root.appendChild(box);
-  });
-}
-
-function showResult(query, state) {
-  const root = document.getElementById("result");
-  root.innerHTML = "";
-  if (!query) return;
-  root.appendChild(el("div", "Запрос: " + query, "meta"));
-
-  if (state.type === "clarify") {
-    root.appendChild(el("div", "Уточните, пожалуйста, вопрос:", "meta"));
-    state.variants.forEach((s) => {
-      const btn = el("button", s.title, "route");
-      btn.addEventListener("click", () => {
-        document.getElementById("query").value = s.sample;
-        search(s.sample);
-      });
-      root.appendChild(btn);
-    });
-    addLog(query, "уточнение запроса");
-    return;
-  }
-
-  if (state.type === "none") {
-    root.appendChild(el("div", "Раздел недоступен или запрос не распознан."));
-    root.appendChild(el("div", "Передайте вопрос специалисту: cophelp@admhmao.ru, 8 800 100-58-67", "meta"));
-    const btn = el("button", "Открыть службу поддержки");
-    btn.addEventListener("click", () => openLink("/journal-help-action"));
-    root.appendChild(btn);
-    addLog(query, "раздел недоступен");
-    return;
-  }
-
-  renderScenario(root, state.scenario);
-  addLog(query, state.scenario.title);
-}
-
-function search(query) {
-  const text = String(query || "").trim();
-  if (!text) return;
-  showResult(text, window.COP_find(text));
-}
-
-function renderRoutes() {
-  const root = document.getElementById("routes");
-  if (!root) return;
-  root.innerHTML = "";
-  (window.COP_KB || []).forEach((s) => {
-    const btn = el("button", s.title, "route");
-    btn.addEventListener("click", () => {
-      document.getElementById("query").value = s.sample;
-      search(s.sample);
-    });
-    root.appendChild(btn);
-  });
-}
-
-document.getElementById("searchBtn").addEventListener("click", () => {
-  search(document.getElementById("query").value);
-});
-document.getElementById("query").addEventListener("keydown", (e) => {
-  if (e.key === "Enter") search(document.getElementById("query").value);
-});
-document.getElementById("clearLog").addEventListener("click", () => {
-  const storage = safeStorage();
-  if (!storage) return;
-  try { storage.set({ [LOG_KEY]: [] }).then(() => renderLog()); } catch (e) {}
-});
-
-function highlightWord() {
-  const input = document.getElementById("word");
-  const status = document.getElementById("status");
-  const word = String(input.value || "").trim();
-  if (!word) {
-    if (status) status.textContent = "Введите слово.";
-    return;
-  }
-  activateStep({ noPanel: true, title: "Поиск: " + word, instruction: "", selectorText: word });
-  if (status) status.textContent = "Слово «" + word + "» отправлено на страницу. Результат видно в панели помощника.";
-}
-document.getElementById("wordBtn").addEventListener("click", highlightWord);
-document.getElementById("word").addEventListener("keydown", (e) => {
-  if (e.key === "Enter") highlightWord();
-});
-document.getElementById("openCop").addEventListener("click", (e) => {
-  e.preventDefault();
-  openLink("https://cop.admhmao.ru/elk");
-});
-
-renderRoutes();
-renderLog();
+$("searchBtn").addEventListener("click",()=>search($("query").value));
+$("query").addEventListener("keydown",e=>{if(e.key==="Enter")search($("query").value);});
+$("wordBtn").addEventListener("click",()=>{const word=$("word").value.trim();if(!word){$("status").textContent="Введите название элемента.";return;}activateStep({noPanel:true,title:"Поиск: "+word,selectorText:word});});
+$("word").addEventListener("keydown",e=>{if(e.key==="Enter")$("wordBtn").click();});
+$("clearLog").addEventListener("click",async()=>{const s=storage();if(s){await s.set({[LOG_KEY]:[]});renderLog();}});
+$("openCop").addEventListener("click",e=>{e.preventDefault();openLink("/elk");});
+function renderRoutes(){const root=$("routes");(window.COP_KB||[]).forEach(s=>{const b=node("button",s.title,"route");b.addEventListener("click",()=>{$("query").value=s.sample;search(s.sample);});root.append(b);});}
+renderRoutes();renderLog();$("query").focus();

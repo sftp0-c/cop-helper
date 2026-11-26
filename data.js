@@ -1,198 +1,162 @@
-// Общие данные и поиск: используются и в popup, и на странице сайта.
-window.COP_KB = [
-  {
-    id: "pfdo",
-    title: "Переход родителя в ПФДО",
-    sample: "как родителю перейти в ПФДО",
-    keywords: ["пфдо", "дополнительное образование", "перейти в пфдо", "портал пфдо"],
-    role: "родитель",
-    startScreen: "главная ЦОП — https://cop.admhmao.ru/elk",
-    expectedResult: "открыт портал ПФДО https://hmao.pfdo.ru",
-    links: [{ title: "Портал ПФДО", href: "https://hmao.pfdo.ru" }],
-    steps: [
-      {
-        title: "Найти блок «ПФДО»",
-        instruction: "На главной странице ЦОП найдите блок «ПФДО» в разделе special features.",
-        selectorText: "ПФДО",
-      },
-      {
-        title: "Нажать кнопку «Перейти»",
-        instruction: "В блоке «ПФДО» нажмите кнопку «Перейти» — она ведёт на https://hmao.pfdo.ru.",
-        selectorText: "Перейти",
-      },
-      {
-        title: "Авторизоваться",
-        instruction: "На портале ПФДО войдите через ЕСИА и проверьте данные ребёнка.",
-        selectorText: null,
-      },
-    ],
-  },
-  {
-    id: "parent-journal",
-    title: "Вход в электронный журнал родителю",
-    sample: "войти родителю в электронный журнал, посмотреть оценки",
-    keywords: ["родител", "электронный журнал", "оценки", "журнал родителю", "дневник ребёнка"],
-    role: "родитель",
-    startScreen: "главная ЦОП — https://cop.admhmao.ru/elk",
-    expectedResult: "открыт журнал роли родителя",
-    links: [{ title: "Вход для родителя", href: "/journal-esia-action/mode.elk/role.parent" }],
-    steps: [
-      {
-        title: "Выбрать вход для родителя",
-        instruction: "На главной ЦОП выберите ссылку входа для роли «родитель» (/journal-esia-action/mode.elk/role.parent).",
-        selectorText: "Система Электронного журнала",
-      },
-      {
-        title: "Авторизация ЕСИА",
-        instruction: "Пройдите авторизацию через ЕСИА.",
-        selectorText: null,
-      },
-      {
-        title: "Просмотр оценок ребёнка",
-        instruction: "Выберите ребёнка и откройте журнал оценок.",
-        selectorText: null,
-      },
-    ],
-  },
-  {
-    id: "student-journal",
-    title: "Вход в электронный журнал ученику",
-    sample: "войти ученику в электронный журнал",
-    keywords: ["учени", "студент", "журнал ученику", "оценки ученика", "дневник"],
-    role: "ученик",
-    startScreen: "главная ЦОП — https://cop.admhmao.ru/elk",
-    expectedResult: "открыт журнал роли ученика",
-    links: [{ title: "Вход для ученика", href: "/journal-esia-action/mode.elk/role.student" }],
-    steps: [
-      {
-        title: "Выбрать вход для ученика",
-        instruction: "На главной ЦОП выберите ссылку входа для роли «ученик» (/journal-esia-action/mode.elk/role.student).",
-        selectorText: "Система Электронного журнала",
-      },
-      { title: "Авторизация ЕСИА", instruction: "Пройдите авторизацию через ЕСИА.", selectorText: null },
-      { title: "Открыть дневник", instruction: "Откройте свой дневник и расписание.", selectorText: null },
-    ],
-  },
-  {
-    id: "teacher-journal",
-    title: "Вход в электронный журнал учителю",
-    sample: "войти учителю в электронный журнал",
-    keywords: ["учител", "педагог", "журнал учителю", "эжд"],
-    role: "учитель",
-    startScreen: "главная ЦОП — https://cop.admhmao.ru/elk",
-    expectedResult: "открыт журнал /journal-app под ролью учителя",
-    links: [{ title: "Вход для учителя", href: "/journal-esia-action/mode.elk/role.teacher" }],
-    steps: [
-      {
-        title: "Выбрать «Система Электронного журнала»",
-        instruction: "В разделе входа выберите «Система Электронного журнала».",
-        selectorText: "Система Электронного журнала",
-      },
-      {
-        title: "Роль учителя",
-        instruction: "Используйте ссылку /journal-esia-action/mode.elk/role.teacher.",
-        selectorText: "Вход по логину и паролю",
-      },
-      { title: "Авторизация", instruction: "Пройдите авторизацию через ЕСИА — откроется /journal-app.", selectorText: null },
-    ],
-  },
-  {
-    id: "online-lesson",
-    title: "Назначение онлайн-урока учителем",
-    sample: "как назначить онлайн-урок учителю",
-    keywords: ["онлайн-урок", "онлайн урок", "назначить урок", "дистанционный", "вебинар"],
-    role: "учитель",
-    startScreen: "электронный журнал /journal-app (роль учителя)",
-    expectedResult: "онлайн-урок назначен и виден ученикам",
-    links: [{ title: "Электронный журнал", href: "/journal-app" }],
-    steps: [
-      { title: "Открыть расписание", instruction: "В журнале откройте раздел расписания уроков.", selectorText: "Расписание" },
-      { title: "Создать онлайн-урок", instruction: "Создайте новое занятие и укажите тип «онлайн-урок».", selectorText: "Создать" },
-      { title: "Указать класс и дату", instruction: "Выберите класс, дату и время проведения.", selectorText: "Сохранить" },
-      { title: "Назначить", instruction: "Подтвердите назначение — урок появится у учеников.", selectorText: "Назначить" },
-    ],
-  },
-  {
-    id: "meal",
-    title: "Подтверждение назначения учителем питания",
-    sample: "подтвердить питание учителю",
-    keywords: ["питание", "обед", "подтвердить питание", "назначение питания"],
-    role: "учитель",
-    startScreen: "электронный журнал /journal-app (роль учителя)",
-    expectedResult: "назначение питания подтверждено",
-    links: [{ title: "Электронный журнал", href: "/journal-app" }],
-    steps: [
-      { title: "Открыть раздел «Питание»", instruction: "В журнале откройте раздел питания.", selectorText: "Питание" },
-      { title: "Выбрать класс", instruction: "Выберите класс и период.", selectorText: "Выбрать" },
-      { title: "Подтвердить", instruction: "Нажмите «Подтвердить» и проверьте результат.", selectorText: "Подтвердить" },
-    ],
-  },
-  {
-    id: "school-map",
-    title: "Подобрать школу или детский сад",
-    sample: "подобрать школу или детский сад",
-    keywords: ["школу", "школа", "детский сад", "подобрать", "выбрать школу"],
-    role: "неавторизованный / родитель",
-    startScreen: "главная ЦОП — https://cop.admhmao.ru/elk",
-    expectedResult: "открыта карта школ и детских садов",
-    links: [{ title: "Карта школ и детских садов", href: "/elk?page=map-schools-preschools" }],
-    steps: [
-      { title: "Найти блок подбора", instruction: "На главной ЦОП найдите блок «Подобрать школу/детский сад».", selectorText: "Подобрать" },
-      { title: "Нажать «Подобрать»", instruction: "Кнопка «Подобрать» открывает карту /elk?page=map-schools-preschools.", selectorText: "Подобрать" },
-      { title: "Сравнить организации", instruction: "Используйте фильтры и выберите подходящую организацию.", selectorText: null },
-    ],
-  },
-  {
-    id: "support",
-    title: "Обращение в службу поддержки",
-    sample: "как обратиться в службу поддержки",
-    keywords: ["поддержк", "помощь", "специалист", "вопрос специалисту", "не работает"],
-    role: "любая",
-    startScreen: "страница «Служба поддержки» /journal-help-action",
-    expectedResult: " запрос передан специалисту",
-    links: [{ title: "Служба поддержки", href: "/journal-help-action" }],
-    steps: [
-      { title: "Открыть службу поддержки", instruction: "Нажмите ссылку «Служба поддержки» внизу страницы.", selectorText: "Служба поддержки" },
-      { title: "Подготовить данные", instruction: "Укажите регион, название организации, логин и ФИО, опишите ситуацию и приложите скриншоты.", selectorText: null },
-      { title: "Передать вопрос", instruction: "Отправьте на cophelp@admhmao.ru или позвоните 8 800 100-58-67.", selectorText: null },
-    ],
-  },
-];;
-
-window.COP_BASE_URL = "https://cop.admhmao.ru";
-
-window.COP_norm = function (value) {
-  return String(value || "").toLowerCase().trim();
-};
-
-window.COP_absUrl = function (href) {
-  if (!href) return "";
-  if (/^https?:\/\//i.test(href)) return href;
-  return window.COP_BASE_URL + (href.charAt(0) === "/" ? "" : "/") + href;
-};
-
-window.COP_score = function (query, scenario) {
-  var q = window.COP_norm(query);
-  var points = 0;
-  if (!q) return 0;
-  if (scenario.sample && q.indexOf(window.COP_norm(scenario.sample)) !== -1) {
-    points += Math.max(4, window.COP_norm(scenario.sample).length);
+/* База маршрутов ЦОП. Непроверенные шаги явно помечаются и не выдаются за официальную инструкцию. */
+(function () {
+  "use strict";
+  const BASE = "https://cop.admhmao.ru";
+  const routes = [
+    {
+      id:"parent-journal", title:"Электронный журнал — родителю", category:"ЭЖД",
+      sample:"как родителю посмотреть оценки ребенка в электронном дневнике",
+      keywords:["родител","мам","пап","законный представитель","оценки","домашнее задание","дневник","электронный журнал","эжд"],
+      role:"Родитель", startScreen:"ЦОП → вход в электронный журнал",
+      expectedResult:"Открыт электронный журнал родителя",
+      confidence:"Сценарий входа описан в официальном руководстве ЦОП для родителя и ученика; отдельные элементы интерфейса могут обновляться.",
+      links:[{title:"Вход для родителя",href:"/journal-esia-action/mode.elk/role.parent"},{title:"Руководство родителя и ученика (PDF)",href:"https://cop.admhmao.ru/data/cop_instr-5_parent-student.pdf"}],
+      steps:[
+        {title:"Откройте вход для родителя",instruction:"Перейдите по ссылке «Вход для родителя». Если портал запросит авторизацию, используйте ЕСИА.",selectorText:"Система Электронного журнала"},
+        {title:"Завершите авторизацию",instruction:"Пройдите вход на стороне ЕСИА. Не вводите пароль Госуслуг в сторонние формы.",selectorText:null},
+        {title:"Откройте дневник ребёнка",instruction:"После входа выберите нужного ребёнка, если система предлагает выбор, затем откройте оценки, расписание или домашние задания.",selectorText:null}
+      ]
+    },
+    {
+      id:"student-journal", title:"Электронный журнал — ученику", category:"ЭЖД",
+      sample:"как ученику открыть свой электронный дневник и оценки",
+      keywords:["ученик","школьник","ребенок","ребёнок","мои оценки","расписание","домашнее задание","дневник","электронный журнал","эжд"],
+      role:"Ученик", startScreen:"ЦОП → вход в электронный журнал",
+      expectedResult:"Открыт электронный журнал ученика",
+      confidence:"Сценарий входа описан в официальном руководстве ЦОП для родителя и ученика; отдельные элементы интерфейса могут обновляться.",
+      links:[{title:"Вход для ученика",href:"/journal-esia-action/mode.elk/role.student"},{title:"Руководство родителя и ученика (PDF)",href:"https://cop.admhmao.ru/data/cop_instr-5_parent-student.pdf"}],
+      steps:[
+        {title:"Откройте вход для ученика",instruction:"Перейдите по ссылке для роли ученика.",selectorText:"Система Электронного журнала"},
+        {title:"Авторизуйтесь",instruction:"Завершите авторизацию предложенным порталом способом.",selectorText:null},
+        {title:"Проверьте дневник",instruction:"Откройте оценки, расписание и домашние задания в своём профиле.",selectorText:null}
+      ]
+    },
+    {
+      id:"teacher-journal", title:"Электронный журнал — учителю", category:"ЭЖД",
+      sample:"как учителю войти в электронный журнал",
+      keywords:["учител","педагог","классный руководитель","журнал учителю","выставить оценку","эжд"],
+      role:"Учитель", startScreen:"ЦОП → вход в электронный журнал",
+      expectedResult:"Открыт интерфейс электронного журнала с правами учителя",
+      confidence:"Руководство ЦОП описывает вход через Госуслуги и работу учителя; доступность функций зависит от прав организации.",
+      links:[{title:"Вход для учителя",href:"/journal-esia-action/mode.elk/role.teacher"},{title:"Руководство учителя (PDF)",href:"https://cop.admhmao.ru/data/cop_instr-2_teacher-clteacher.pdf"}],
+      steps:[
+        {title:"Откройте вход для учителя",instruction:"Перейдите по ссылке для роли учителя.",selectorText:"Система Электронного журнала"},
+        {title:"Авторизуйтесь",instruction:"Выполните авторизацию и дождитесь загрузки рабочего интерфейса.",selectorText:null},
+        {title:"Проверьте доступные разделы",instruction:"Состав разделов зависит от назначенных прав вашей организации.",selectorText:null}
+      ]
+    },
+    {
+      id:"pfdo", title:"Переход родителя в ПФДО", category:"ПФДО",
+      sample:"как родителю перейти в ПФДО и записать ребенка на кружок",
+      keywords:["пфдо","кружок","секция","дополнительное образование","сертификат","записать на программу","запись на обучение"],
+      role:"Родитель", startScreen:"ЦОП → раздел ПФДО / Навигатор",
+      expectedResult:"Открыт портал персонифицированного дополнительного образования",
+      confidence:"Официальное руководство ЦОП указывает, что раздел «ПФДО» доступен родителю из стартовой страницы дневника; из него открывается личный кабинет ПФДО.",
+      links:[{title:"Портал ПФДО ХМАО — Югры",href:"https://hmao.pfdo.ru/app"},{title:"ЦОП",href:"/elk"},{title:"Руководство родителя и ученика (PDF)",href:"https://cop.admhmao.ru/data/cop_instr-5_parent-student.pdf"}],
+      steps:[
+        {title:"Откройте раздел «ПФДО»",instruction:"На стартовой странице дневника выберите вкладку «ПФДО». Согласно руководству, раздел доступен только родителю.",selectorText:"ПФДО"},
+        {title:"Посмотрите программы и расписание",instruction:"В разделе отображаются программы, на которые записан ребёнок. Для просмотра периода и времени занятий нажмите «Показать расписание».",selectorText:"Показать расписание"},
+        {title:"Перейдите в личный кабинет ПФДО",instruction:"Нажмите «Перейти в личный кабинет ПФДО». Откроется портал персонифицированного дополнительного образования ХМАО — Югры.",selectorText:"Перейти в личный кабинет ПФДО"}
+      ]
+    },
+    {
+      id:"online-lesson", title:"Назначение онлайн-урока", category:"ЭЖД",
+      sample:"как учителю назначить онлайн урок классу",
+      keywords:["онлайн урок","онлайн-урок","дистанционный урок","вебинар","назначить урок","ссылка на урок"],
+      role:"Учитель", startScreen:"Электронный журнал → рабочее место учителя",
+      expectedResult:"Онлайн-занятие создано и отображается участникам",
+      confidence:"Пошаговый сценарий описан в официальном руководстве ЦОП для учителя и отдельной инструкции по онлайн-урокам. Документы не новые — сверьте названия элементов с текущим интерфейсом.",
+      links:[{title:"Открыть электронный журнал",href:"/journal-app"},{title:"Инструкция ЦОП: онлайн-уроки (PDF)",href:"https://cop.admhmao.ru/data/cop_instr_online.pdf"},{title:"Руководство учителя (PDF)",href:"https://cop.admhmao.ru/data/cop_instr-2_teacher-clteacher.pdf"}],
+      steps:[
+        {title:"Откройте журнал нужного предмета",instruction:"Войдите в журнал под ролью учителя и выберите нужный класс и предмет.",selectorText:null},
+        {title:"Перейдите во вкладку «Онлайн-уроки»",instruction:"В журнале учителя откройте вкладку «Онлайн-уроки» и нажмите «+Добавить».",selectorText:"Онлайн-уроки"},
+        {title:"Заполните параметры занятия",instruction:"Выберите урок, учеников и платформу: ЦОП.Онлайн, «Сферум» или другой сервис. Для другого сервиса в поле нужно вставить только ссылку на заранее созданную видеоконференцию.",selectorText:"+Добавить"},
+        {title:"Сохраните и опубликуйте урок",instruction:"После сохранения запись появится в таблице. Нажмите «Опубликовать», чтобы открыть доступ ученикам и учителю. Ссылка активна 2,5 часа — не публикуйте урок раньше чем за 2 часа до начала.",selectorText:"Опубликовать"},
+        {title:"Проверьте доступ ученикам",instruction:"Кнопка перехода появится в дневниках назначенных учеников после публикации. Онлайн-уроки не отображаются у родителей; для доступа нужен браузер, мобильное приложение не поддерживает эту функцию.",selectorText:"Онлайн-урок"}
+      ]
+    },
+    {
+      id:"meal", title:"Назначение и подтверждение питания", category:"Питание",
+      sample:"как учителю подтвердить питание ученика",
+      keywords:["питание","обед","завтрак","назначить питание","подтвердить питание","питание ученика"],
+      role:"Учитель", startScreen:"Подсистема питания / рабочее место учителя",
+      expectedResult:"Операция с питанием выполнена и подтверждена системой",
+      confidence:"Требует сверки с актуальной инструкцией и интерфейсом. Точные кнопки и порядок действий не подтверждены.",
+      links:[{title:"Подсистема питания",href:"https://cop-pitanie.admhmao.ru/"}],
+      steps:[
+        {title:"Откройте подсистему питания",instruction:"Перейдите в подсистему питания по ссылке, если она доступна вашей организации.",selectorText:"Питание"},
+        {title:"Проверьте класс и дату",instruction:"Перед подтверждением обязательно проверьте выбранный класс, дату и список обучающихся.",selectorText:null},
+        {title:"Не подтверждайте наугад",instruction:"Точный порядок назначения и подтверждения требует актуальной инструкции администратора ЦОП.",selectorText:null}
+      ]
+    },
+    {
+      id:"school-map", title:"Подбор школы или детского сада", category:"Услуги",
+      sample:"где подобрать школу или детский сад на ЦОП",
+      keywords:["школ","детский сад","детсад","дошколь","подобрать","карта организаций"],
+      role:"Без авторизации / родитель", startScreen:"Главная ЦОП",
+      expectedResult:"Открыта карта школ и дошкольных организаций",
+      confidence:"Путь из исходной конфигурации расширения; актуальность страницы следует проверить.",
+      links:[{title:"Открыть карту организаций",href:"/elk?page=map-schools-preschools"}],
+      steps:[
+        {title:"Откройте карту организаций",instruction:"Перейдите к карте школ и детских садов.",selectorText:"Подобрать"},
+        {title:"Используйте фильтры карты",instruction:"Уточните тип организации и местоположение, затем откройте карточку подходящей организации.",selectorText:null}
+      ]
+    },
+    {
+      id:"support", title:"Связаться со службой поддержки", category:"Помощь",
+      sample:"куда обратиться если не работает ЦОП",
+      keywords:["поддержк","не работает","ошибка входа","обратиться","специалист","помощь","техподдержка"],
+      role:"Любая", startScreen:"ЦОП → служба поддержки",
+      expectedResult:"Обращение направлено специалистам",
+      confidence:"Контакты взяты из исходной версии расширения; перед публикацией их необходимо подтвердить на странице поддержки.",
+      links:[{title:"Служба поддержки ЦОП",href:"/journal-help-action"}],
+      steps:[
+        {title:"Откройте службу поддержки",instruction:"Перейдите на страницу службы поддержки ЦОП.",selectorText:"Служба поддержки"},
+        {title:"Опишите проблему",instruction:"Укажите организацию, раздел, время возникновения ошибки и последовательность действий. Не отправляйте пароль, коды ЕСИА и другие секретные данные.",selectorText:null},
+        {title:"Передайте обращение",instruction:"Используйте контакты, опубликованные непосредственно на официальной странице поддержки.",selectorText:null}
+      ]
+    }
+  ];
+  const norm = value => String(value || "").toLocaleLowerCase("ru").replace(/ё/g,"е").replace(/[«»„“”"'.,!?():;]/g," ").replace(/[^\p{L}\p{N}\s-]/gu," ").replace(/\s+/g," ").trim();
+  const roleHints = {
+    parent:{hints:["родител","мам","пап","законный представитель"],label:"родител"},
+    student:{hints:["учен","школьник","учащ"],label:"учен"},
+    teacher:{hints:["учител","педагог","классный руководитель"],label:"учител"}
+  };
+  function tokens(value){ return norm(value).split(/\s+/).filter(x=>x.length>1); }
+  function score(query, route) {
+    const q=norm(query); if(!q) return 0;
+    const words=tokens(q); let points=0;
+    const sample=norm(route.sample), title=norm(route.title);
+    if(q===sample) points+=30;
+    if(sample.includes(q) || q.includes(sample)) points+=12;
+    if(q.includes(title)) points+=12;
+    for(const kw of route.keywords){
+      const k=norm(kw);
+      if(q.includes(k)) points+=Math.min(12,4+k.length/3);
+      else if(k.length>4 && words.some(w=>k.startsWith(w)||w.startsWith(k.slice(0,Math.min(5,k.length))))) points+=2;
+    }
+    const matched=words.filter(w=>title.includes(w)||route.keywords.some(k=>norm(k).includes(w))).length;
+    points+=matched*1.5;
+    const role=Object.keys(roleHints).find(r=>roleHints[r].hints.some(h=>q.includes(h)));
+    if(role && route.role.toLowerCase().includes(roleHints[role].label)) points+=7;
+    else if(role && route.role.toLowerCase()!=="любая" && !route.role.toLowerCase().includes(roleHints[role].label)) points-=4;
+    return points;
   }
-  (scenario.keywords || []).forEach(function (kw) {
-    var k = window.COP_norm(kw);
-    if (q.indexOf(k) !== -1) points += Math.max(2, k.length);
-  });
-  return points;
-};
-
-window.COP_find = function (query) {
-  var ranked = (window.COP_KB || []).map(function (s) {
-    return { scenario: s, score: window.COP_score(query, s) };
-  }).filter(function (item) { return item.score > 0; })
-    .sort(function (a, b) { return b.score - a.score; });
-  if (!ranked.length) return { type: "none" };
-  var best = ranked[0].score;
-  var close = ranked.filter(function (item) { return item.score >= best * 0.75; });
-  if (close.length > 1) return { type: "clarify", variants: close.map(function (item) { return item.scenario; }) };
-  return { type: "found", scenario: ranked[0].scenario };
-};
+  function find(query) {
+    const ranked=routes.map(s=>({scenario:s,score:score(query,s)})).filter(x=>x.score>=4).sort((a,b)=>b.score-a.score);
+    if(!ranked.length) return {type:"none"};
+    const top=ranked[0], second=ranked[1];
+    if(second && second.score>=top.score*0.78) return {type:"clarify",variants:ranked.filter(x=>x.score>=top.score*0.78).slice(0,4).map(x=>x.scenario)};
+    if(top.score<6) return {type:"clarify",variants:ranked.slice(0,3).map(x=>x.scenario)};
+    return {type:"found",scenario:top.scenario};
+  }
+  window.COP_KB=routes;
+  window.COP_BASE_URL=BASE;
+  window.COP_norm=norm;
+  window.COP_absUrl=function(href){
+    if(!href) return "";
+    try { const u=new URL(href,BASE); return ["https:","http:"].includes(u.protocol) ? u.href : ""; } catch(e){ return ""; }
+  };
+  window.COP_find=find;
+})();
