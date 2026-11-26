@@ -21,4 +21,4 @@ for(const [query,id] of cases){
  assert.equal(result.scenario.id,id,query+" should resolve to "+id);
 }
 assert.equal(find("абракадабра неизвестный запрос").type,"none");
-console.log("Search smoke tests passed: "+cases.length+" routes + unknown query.");
+console.log("Cop Helper v2 search smoke tests passed: "+cases.length+" routes + unknown query.");
