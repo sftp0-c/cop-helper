@@ -1,119 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ЦОП Помощник</title>
-  <style>
-    :root {
-      --bg: #161622;
-      --surface: #222236;
-      --surface-2: #2c2c44;
-      --text: #f2f2f7;
-      --muted: #a9a9bd;
-      --accent: #ffc400;
-      --danger: #ff4a2a;
-      --line: #3a3a55;
-    }
-    * { box-sizing: border-box; }
-    body {
-      width: 480px;
-      max-height: 660px;
-      overflow-y: auto;
-      margin: 0;
-      padding: 16px;
-      background: linear-gradient(160deg, #1b1b2b, var(--bg));
-      color: var(--text);
-      font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-    body::-webkit-scrollbar { width: 8px; }
-    body::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
-
-    header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-    header img { width: 38px; height: 38px; border-radius: 9px; }
-    h1 { font-size: 17px; margin: 0; }
-    h1 small { display: block; font-size: 11px; font-weight: normal; color: var(--muted); margin-top: 2px; }
-
-    .row { display: flex; gap: 7px; }
-    input[type="text"] {
-      flex: 1; min-width: 0; padding: 9px 10px;
-      border: 1px solid var(--line); border-radius: 8px;
-      background: var(--surface); color: var(--text); font-size: 14px;
-    }
-    input[type="text"]:focus { outline: 2px solid var(--accent); border-color: transparent; }
-    button {
-      padding: 9px 12px; border: none; border-radius: 8px;
-      background: var(--surface-2); color: var(--text);
-      font: inherit; font-size: 13px; cursor: pointer; white-space: nowrap;
-    }
-    button:hover { filter: brightness(1.18); }
-    button.primary { background: var(--accent); color: #1e1e2e; font-weight: 700; }
-    button.danger { background: var(--danger); color: #fff; font-weight: 700; }
-
-    .block {
-      margin-top: 12px; padding: 12px;
-      background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
-    }
-    .block h2 { font-size: 13px; margin: 0 0 8px; color: var(--accent); text-transform: uppercase; letter-spacing: .04em; }
-    #result h3 { font-size: 15px; margin: 10px 0 5px; }
-    .meta { font-size: 12px; color: var(--muted); margin-bottom: 5px; }
-    .step {
-      margin: 9px 0; padding: 9px 10px;
-      background: var(--surface-2); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0;
-    }
-    .step-title { font-weight: 700; }
-    .step-instr { margin: 4px 0 7px; font-size: 13px; }
-    .chip {
-      display: inline-block; padding: 2px 7px; margin-right: 5px;
-      background: #3a3a55; border-radius: 10px; font-size: 11px; color: var(--muted);
-    }
-    #status { margin-top: 9px; font-size: 12px; color: var(--accent); }
-    details { margin-top: 12px; }
-    summary { cursor: pointer; color: var(--muted); font-size: 13px; }
-    details .route { display: block; width: 100%; text-align: left; margin: 4px 0; }
-    .log-entry { padding: 5px 0; border-bottom: 1px solid var(--line); font-size: 12px; }
-    footer { margin-top: 14px; text-align: center; font-size: 11px; color: var(--muted); }
-    footer a { color: var(--accent); }
-  </style>
-</head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ЦОП Помощник</title>
+<style>
+:root{color-scheme:dark;--bg:#101827;--panel:#172337;--panel2:#1d2c43;--line:#2b3d56;--text:#eef4fb;--muted:#a8b7ca;--accent:#69d2c1;--warn:#f3c76a;--blue:#8eb8ff}
+*{box-sizing:border-box}body{width:440px;max-height:680px;overflow:auto;margin:0;padding:16px;background:radial-gradient(ellipse at 100% 0,#203b51 0,transparent 45%),var(--bg);color:var(--text);font:13px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{display:flex;align-items:center;gap:11px;margin-bottom:15px}header img{width:42px;height:42px}h1{font-size:18px;margin:0;letter-spacing:-.3px}header p{margin:2px 0 0;color:var(--muted);font-size:11px}
+.card{background:rgba(23,35,55,.94);border:1px solid var(--line);border-radius:13px;padding:13px;margin:10px 0}
+.eyebrow{font-size:10px;font-weight:800;letter-spacing:1px;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
+.search{display:flex;gap:7px}input{width:100%;min-width:0;background:#0e1929;border:1px solid var(--line);border-radius:8px;padding:10px;color:var(--text);font:inherit;outline:none}input:focus{border-color:var(--accent);box-shadow:0 0 0 2px #69d2c122}
+button{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--panel2);color:var(--text);font:inherit;cursor:pointer}button:hover{border-color:var(--accent)}button.primary{background:var(--accent);border-color:var(--accent);color:#08211f;font-weight:800}
+button.subtle{background:transparent;color:var(--muted)}.meta{color:var(--muted);font-size:11px}.route{width:100%;text-align:left;margin:4px 0}.route-title{font-weight:750;font-size:15px;margin:5px 0}.result-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.pill{font-size:10px;padding:3px 7px;border-radius:20px;background:#29434c;color:#a6e9dd}.pill.warn{background:#4b3b20;color:#f5d38a}.steps{padding:0;margin:10px 0;list-style:none;counter-reset:step}.steps li{position:relative;padding:9px 9px 9px 35px;margin:7px 0;background:#1d2c43;border:1px solid #293d57;border-radius:9px}.steps li:before{counter-increment:step;content:counter(step);position:absolute;left:10px;top:9px;width:17px;height:17px;border-radius:50%;display:grid;place-items:center;background:#284b50;color:#9be5d8;font-size:10px;font-weight:bold}.steps b{display:block;margin-bottom:3px}.steps p{margin:0;color:#c5d1df}.actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}.actions button{font-size:11px}.note{border-left:3px solid var(--warn);padding:7px 9px;background:#322d22;color:#e8d5a8;border-radius:0 7px 7px 0;font-size:11px;margin-top:9px}
+details{border-top:1px solid var(--line);padding-top:10px;margin-top:11px}summary{cursor:pointer;color:var(--muted);font-weight:700}.log-entry{padding:7px 0;border-bottom:1px solid var(--line);font-size:11px}.empty{color:var(--muted);font-size:12px;padding:8px 0}footer{display:flex;justify-content:space-between;gap:8px;margin-top:12px;color:var(--muted);font-size:10px}a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+</style></head>
 <body>
-  <header>
-    <img src="icon.svg" alt="">
-    <h1>ЦОП Помощник<small>Поиск маршрутов и подсветка слов на странице</small></h1>
-  </header>
-
-  <div class="block">
-    <h2>Вопрос</h2>
-    <div class="row">
-      <input id="query" type="text" placeholder="Например: как уйти в ПФДО?">
-      <button id="searchBtn" class="primary">Найти</button>
-    </div>
-    <div id="result"></div>
-  </div>
-
-  <div class="block">
-    <h2>Подсветка на странице</h2>
-    <div class="row">
-      <input id="word" type="text" placeholder="Слово: ПФДО, Перейти…">
-      <button id="wordBtn" class="danger">Подсветить</button>
-    </div>
-    <div id="status">Введите слово и нажмите «Подсветить».</div>
-  </div>
-
-  <details>
-    <summary>Контрольные маршруты</summary>
-    <div id="routes"></div>
-  </details>
-
-  <details>
-    <summary>Журнал ответов</summary>
-    <div id="log"></div>
-    <button id="clearLog" style="margin-top:8px;">Очистить журнал</button>
-  </details>
-
-  <footer><a href="https://cop.admhmao.ru/elk" id="openCop">Открыть сайт ЦОП ↗</a></footer>
-
-  <script src="data.js"></script>
-  <script src="popup.js"></script>
-</body>
-</html>
+<header><img src="icon.svg" alt=""><div><h1>ЦОП Помощник</h1><p>Навигация по ЦОП ХМАО — Югры</p></div></header>
+<section class="card"><div class="eyebrow">Что нужно сделать?</div><div class="search"><input id="query" type="search" autocomplete="off" placeholder="Например: посмотреть оценки ребёнка"><button id="searchBtn" class="primary">Найти</button></div><div id="result" aria-live="polite"></div></section>
+<section class="card"><div class="eyebrow">Подсветка на открытой странице</div><div class="search"><input id="word" type="search" placeholder="Название кнопки или раздела"><button id="wordBtn">Найти</button></div><div class="meta" id="status">Подсветка доступна на страницах ЦОП и подключённых подсистем.</div></section>
+<details><summary>Контрольные маршруты</summary><div id="routes"></div></details>
+<details><summary>Журнал запросов</summary><div id="log"></div><button id="clearLog" class="subtle">Очистить журнал</button></details>
+<footer><span>Версия 2.0.0 · без передачи запросов на сервер</span><a href="https://cop.admhmao.ru/elk" id="openCop">Открыть ЦОП ↗</a></footer>
+<script src="data.js"></script><script src="popup.js"></script>
+</body></html>
